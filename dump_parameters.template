@@ -1,0 +1,6 @@
+# sqlplus connection string
+SQLPLUS_CONNECTION_STRING='scott/****@example.com/ORCL'
+
+# Leave this as 'host' to connect to normal databases
+# Change this to connect a DB inside a docker network
+DOCKER_NETWORK='host'
