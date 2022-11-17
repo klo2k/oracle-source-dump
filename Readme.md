@@ -36,13 +36,13 @@ TODO 🗒:
 Dump single package
 
 ```bash
-./dump_views.sh SCHEMA_NAME VIEW_NAME
+./dump_packages.sh SCHEMA_NAME PACKAGE_NAME
 ```
 
-Dump all view from a schema
+Dump all packages from a schema
 
 ```bash
-./dump_views.sh SCHEMA_NAME
+./dump_packages.sh SCHEMA_NAME
 ```
 
 ### Dump Views
