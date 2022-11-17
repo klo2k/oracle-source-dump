@@ -44,7 +44,7 @@ spool off
     );
   -- Write script to dump all packages
   else
-    for p in (select distinct owner, name from dba_source where type='PACKAGE' and owner=upper('&&DB_SCHEMA')) loop
+    for p in (select distinct owner, name from all_source where type='PACKAGE' and owner=upper('&&DB_SCHEMA')) loop
       dbms_output.put_line ('spool "/mnt/out/'||p.owner||'.'||p.name||'.sql"');
       dbms_output.put_line (
         -- e.g. `select dbms_metadata.get_ddl('PACKAGE', 'SOME_PACKAGE', 'SOME_SCHEMA')||chr(10)||';' from dual;`
