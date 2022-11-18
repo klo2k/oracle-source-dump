@@ -1,4 +1,4 @@
--- Ensure we dump the package as-is
+-- Ensure we dump the object as-is
 set serveroutput on
 SET LINESIZE 32767
 SET PAGESIZE 0
@@ -18,7 +18,7 @@ set verify off
 whenever sqlerror exit sql.sqlcode
 whenever oserror exit failure
 
--- Get the schema and package name from command line
+-- Get the schema and object name from command line
 define DB_SCHEMA=&1
 define DB_VIEW=&2 ''
 
@@ -45,7 +45,6 @@ spool off
   else
     for v in (select owner, view_name from all_views where owner=upper('&&DB_SCHEMA')) loop
       -- `ltrim` fixes the leading '\n '
-      -- chr(39) = `'` - Work-around `ORA-03114: not connected to ORACLE` error if I use `'''`
       -- e.g.: `select ltrim(dbms_metadata.get_ddl('VIEW', 'SOME_VIEW', 'SOME_SCHEMA')||chr(10)||';',chr(10)||''') from dual;`
       dbms_output.put_line (
         q'[

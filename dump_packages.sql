@@ -1,4 +1,4 @@
--- Ensure we dump the package as-is
+-- Ensure we dump the object as-is
 set serveroutput on
 SET LINESIZE 32767
 SET PAGESIZE 0
@@ -18,14 +18,14 @@ set verify off
 whenever sqlerror exit sql.sqlcode
 whenever oserror exit failure
 
--- Get the schema and package name from command line
+-- Get the schema and object name from command line
 define DB_SCHEMA=&1
 define DB_PACKAGE=&2 ''
 
 -- Generate the actual export script
 spool /mnt/out/run_dump_packages.sql
 begin
-  -- Set the '/' package terminator in output
+  -- Set the '/' SQL terminator in output
   dbms_output.put_line(q'[exec DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM,'SQLTERMINATOR',true);]');
 
   -- Write script to dump single package if DB_PACKAGE defined
@@ -45,15 +45,7 @@ spool off
   -- Write script to dump all packages
   else
     for p in (select distinct owner, name from all_source where type='PACKAGE' and owner=upper('&&DB_SCHEMA')) loop
-      dbms_output.put_line ('spool "/mnt/out/'||p.owner||'.'||p.name||'.sql"');
-      dbms_output.put_line (
-        -- e.g. `select dbms_metadata.get_ddl('PACKAGE', 'SOME_PACKAGE', 'SOME_SCHEMA')||chr(10)||';' from dual;`
-        -- chr(39) = `'` - Work-around `ORA-03114: not connected to ORACLE` error if I use `'''`
-        'select dbms_metadata.get_ddl(''PACKAGE'', '||chr(39)||p.name||chr(39)||', '||chr(39)||p.owner||chr(39)||') from dual;'
-      );
-      dbms_output.put_line ('spool off');
       -- `ltrim` fixes the leading '\n '
-      -- chr(39) = `'` - Work-around `ORA-03114: not connected to ORACLE` error if I use `'''`
       -- e.g.: `select ltrim(dbms_metadata.get_ddl('PACKAGE', 'SOME_PACKAGE', 'SOME_SCHEMA'),chr(10)||' ') from dual;`
       dbms_output.put_line (
         q'[
