@@ -1,4 +1,4 @@
-# Dump Oracle database objects to file (e.g. views, packages, functions, procedures etc...)
+# Dump Oracle database objects to file (e.g. packages, tables, views, functions, procedures etc...)
 
 Time-saver scripts to dump Oracle database objects to file.
 
@@ -11,6 +11,7 @@ I'll work on things as they are needed - PR welcome 🙂.
 We can dump ✅:
 
 - [Package](#dump-packages)
+- [Table](#dump-tables)
 - [View](#dump-views)
 
 TODO 🗒:
@@ -43,6 +44,20 @@ Dump all packages from a schema
 
 ```bash
 ./dump_packages.sh SCHEMA_NAME
+```
+
+### Dump Tables
+
+Dump single table
+
+```bash
+./dump_tables.sh SCHEMA_NAME TABLE_NAME
+```
+
+Dump all tables from a schema
+
+```bash
+./dump_tables.sh SCHEMA_NAME
 ```
 
 ### Dump Views
